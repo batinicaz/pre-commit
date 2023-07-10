@@ -5,7 +5,7 @@ Simple docker image built on top of [bridgecrew/checkov](https://hub.docker.com/
 * terraform
 * tflint
 
-Built ever day at 2AM to get latest changes.gd
+Built ever day at 2AM to get latest changes.
 
 ## Usage
 
