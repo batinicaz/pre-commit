@@ -1,8 +1,12 @@
 FROM ubuntu:latest as build
+
+ARG TERRAFORM_VERSION
+ARG TF_LINT_VERSION
+
 RUN apt-get update && apt-get install -y curl git unzip
 RUN mkdir "/executables"
-RUN curl -fL https://releases.hashicorp.com/terraform/1.5.2/terraform_1.5.2_linux_amd64.zip -o terraform.zip && unzip terraform.zip && mv terraform /executables
-RUN curl -fL https://github.com/terraform-linters/tflint/releases/download/v0.47.0/tflint_linux_amd64.zip -o tflint.zip && unzip tflint.zip && mv tflint /executables
+RUN curl -fL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip && unzip terraform.zip && mv terraform /executables
+RUN curl -fL https://github.com/terraform-linters/tflint/releases/download/${TF_LINT_VERSION}/tflint_linux_amd64.zip -o tflint.zip && unzip tflint.zip && mv tflint /executables
 
 FROM bridgecrew/checkov:latest
 
