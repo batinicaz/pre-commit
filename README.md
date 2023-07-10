@@ -5,6 +5,8 @@ Simple docker image built on top of [bridgecrew/checkov](https://hub.docker.com/
 * terraform
 * tflint
 
+Built ever day at 2AM to get latest changes.gd
+
 ## Usage
 
 You can use the image in GitHub actions with a job definition like the one below:
