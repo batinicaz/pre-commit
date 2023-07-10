@@ -25,6 +25,27 @@ runs:
   steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # ratchet:actions/checkout@v3
 
+      - name: Find latest version of terraform
+        id: terraform
+        uses: oprypin/find-latest-tag@e1e0e606cc7e9ede25140a5a139b3a5a1b717ece # ratchet:oprypin/find-latest-tag@v1
+        with:
+          repository: hashicorp/terraform
+          releases-only: true
+
+      - name: Find latest version of tflint
+        id: tflint
+        uses: oprypin/find-latest-tag@e1e0e606cc7e9ede25140a5a139b3a5a1b717ece # ratchet:oprypin/find-latest-tag@v1
+        with:
+          repository: terraform-linters/tflint
+          releases-only: true
+
+      - name: Format terraform version correctly
+        id: strip-v-from-tag
+        run: |
+          TAG=${{ steps.terraform.outputs.tag }}
+          echo "TF_VERSION=${TAG#v}" >> $GITHUB_ENV
+        shell: bash
+
       - name: Login to GitHub Container Registry
         if: ${{ inputs.push }}
         uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # ratchet:docker/login-action@v2
@@ -40,3 +61,6 @@ runs:
           file: Dockerfile
           push: ${{ inputs.push }}
           tags: ${{ inputs.image_name }}:latest
+          build-args: |
+            TERRAFORM_VERSION=${{ env.TF_VERSION }}
+            TF_LINT_VERSION=${{ steps.tflint.outputs.tag }}
