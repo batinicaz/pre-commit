@@ -7,6 +7,10 @@ inputs:
     description: The name of the image being built
     default: ghcr.io/${{ github.repository }}
     required: false
+  image_tag:
+    description: The tag of the image being built
+    default: latest
+    required: false
   registry:
     description: The container registry that will be used for image pushing
     default: ghcr.io
@@ -54,13 +58,34 @@ runs:
           username: ${{ github.actor }}
           password: ${{ inputs.token }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@2eb1c1961a95fc15694676618e422e8ba1d63825 # ratchet:docker/build-push-action@v4
+      - name: Build image
+        run: |
+          docker build -t ${{ inputs.image_name }}:${{ inputs.image_tag }} \
+          --build-arg TERRAFORM_VERSION=${{ env.TF_VERSION }} \
+          --build-arg TF_LINT_VERSION=${{ steps.tflint.outputs.tag }} \
+          .
+        shell: bash
+
+      - name: Scan image using Aqua Trivy
+        uses: aquasecurity/trivy-action@master
+        if: always()
         with:
-          context: .
-          file: Dockerfile
-          push: ${{ inputs.push }}
-          tags: ${{ inputs.image_name }}:latest
-          build-args: |
-            TERRAFORM_VERSION=${{ env.TF_VERSION }}
-            TF_LINT_VERSION=${{ steps.tflint.outputs.tag }}
+          image-ref: ${{ inputs.image_name }}:${{ inputs.image_tag }}
+          format: 'sarif'
+          exit-code: 1
+          severity: LOW,MEDIUM,HIGH,CRITICAL
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Push Docker image
+        run: |
+          if [[ "${{ inputs.push }}" == "true" ]]; then
+            docker push ${{ inputs.image_name }}:${{ inputs.image_tag }}
+          else
+            echo 'Push skipped'
+          fi
+        shell: bash
