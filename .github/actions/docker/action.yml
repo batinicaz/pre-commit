@@ -67,7 +67,7 @@ runs:
         shell: bash
 
       - name: Scan image using Aqua Trivy
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@41f05d9ecffa2ed3f1580af306000f734b733e54 # ratchet:aquasecurity/trivy-action@master
         if: always()
         with:
           image-ref: ${{ inputs.image_name }}:${{ inputs.image_tag }}
@@ -77,9 +77,22 @@ runs:
           output: 'trivy-results.sarif'
 
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@46ed16ded91731b2df79a2893d3aea8e9f03b5c4 # ratchet:github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
+
+      - name: Clone test repo for validating image
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # ratchet:actions/checkout@v3
+        with:
+          repository: batinicaz/oci-core
+          ref: v1.2.9
+          path: test
+
+      - name: Test image
+        uses: batinicaz/gha/.github/actions/pre-commit@0e6a5f26d67b9afab876ad3d6d7ceefc6e7949b4 # ratchet:batinicaz/gha/.github/actions/pre-commit@v1.2.0
+        with:
+          image: ${{ inputs.image_name }}:${{ inputs.image_tag }}
+          path: "${{ github.workspace}}/test"
 
       - name: Push Docker image
         run: |
