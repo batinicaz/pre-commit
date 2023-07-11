@@ -9,6 +9,9 @@ RUN curl -fL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terra
 RUN curl -fL https://github.com/terraform-linters/tflint/releases/download/${TF_LINT_VERSION}/tflint_linux_amd64.zip -o tflint.zip && unzip tflint.zip && mv tflint /executables
 
 FROM bridgecrew/checkov:latest
+# Update tools
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt dist-upgrade -y && rm -rf /var/lib/apt/lists/*
 
 # Pre-commit setup
 RUN pip3 install --no-cache-dir pre-commit
