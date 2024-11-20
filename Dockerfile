@@ -1,4 +1,4 @@
-FROM ubuntu:latest as build
+FROM ubuntu:latest AS build
 
 ARG PACKER_VERSION
 ARG TERRAFORM_VERSION
@@ -6,9 +6,9 @@ ARG TF_LINT_VERSION
 
 RUN apt-get update && apt-get install -y curl git unzip
 RUN mkdir "/executables"
-RUN curl -fL https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip -o packer.zip && unzip packer.zip && mv packer /executables
-RUN curl -fL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip && unzip terraform.zip && mv terraform /executables
-RUN curl -fL https://github.com/terraform-linters/tflint/releases/download/${TF_LINT_VERSION}/tflint_linux_amd64.zip -o tflint.zip && unzip tflint.zip && mv tflint /executables
+RUN curl -fL https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip -o packer.zip && unzip -o packer.zip && mv packer /executables
+RUN curl -fL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip && unzip -o terraform.zip && mv terraform /executables
+RUN curl -fL https://github.com/terraform-linters/tflint/releases/download/${TF_LINT_VERSION}/tflint_linux_amd64.zip -o tflint.zip && unzip -o tflint.zip && mv tflint /executables
 
 FROM cgr.dev/chainguard/python:latest-dev
 # Pre-commit setup
