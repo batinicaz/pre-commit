@@ -39,6 +39,7 @@ runs:
       with:
         repository: hashicorp/terraform
         releases-only: true
+        regex: '^v\d+\.\d+\.\d+$'
     - name: Find latest version of tflint
       id: tflint
       uses: oprypin/find-latest-tag@dd2729fe78b0bb55523ae2b2a310c6773a652bd1 # ratchet:oprypin/find-latest-tag@v1
