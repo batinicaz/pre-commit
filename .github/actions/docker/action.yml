@@ -89,7 +89,7 @@ runs:
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
       with:
         repository: batinicaz/oci-core
-        ref: v1.2.9
+        ref: v1.5.4
         path: test
     - name: Test image
       uses: batinicaz/gha/.github/actions/pre-commit@0e6a5f26d67b9afab876ad3d6d7ceefc6e7949b4 # ratchet:batinicaz/gha/.github/actions/pre-commit@v1.2.0
