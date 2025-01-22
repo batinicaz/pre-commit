@@ -10,7 +10,10 @@ RUN curl -fL https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PA
 RUN curl -fL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip && unzip -o terraform.zip && mv terraform /executables
 RUN curl -fL https://github.com/terraform-linters/tflint/releases/download/${TF_LINT_VERSION}/tflint_linux_amd64.zip -o tflint.zip && unzip -o tflint.zip && mv tflint /executables
 
-FROM cgr.dev/chainguard/python:latest-dev
+FROM cgr.dev/chainguard/wolfi-base
+# gcc, glibc-dev and rust required until checkov bumps rustowrkx - https://github.com/bridgecrewio/checkov/pull/6045
+RUN apk add --no-cache bash gcc glibc-dev git python3 py3-pip rust
+
 # Pre-commit setup
 ENV PATH="${PATH}:/home/nonroot/.local/bin"
 RUN pip3 install --no-cache-dir pre-commit
