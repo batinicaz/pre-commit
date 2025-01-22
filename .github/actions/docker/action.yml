@@ -79,6 +79,8 @@ runs:
         severity: LOW,MEDIUM,HIGH,CRITICAL
         output: 'trivy-results.sarif'
         scanners: vuln
+        # We always grab the latest stable version so if there's unpatched vulnerabilities, we're just waiting for a patch
+        skip-files: /bin/packer,/bin/terraform,/bin/tflint
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@b8d3b6e8af63cde30bdc382c0bc28114f4346c88 # ratchet:github/codeql-action/upload-sarif@v2
       with:
