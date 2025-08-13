@@ -12,7 +12,7 @@ RUN curl -fL https://github.com/terraform-linters/tflint/releases/download/${TF_
 
 FROM cgr.dev/chainguard/wolfi-base
 # gcc, glibc-dev and rust required until checkov bumps rustowrkx - https://github.com/bridgecrewio/checkov/pull/6045
-RUN apk add --no-cache bash gcc glibc-dev git python3 py3-pip rust
+RUN apk add --no-cache bash gcc glibc-dev go git python3 py3-pip rust
 
 # Pre-commit setup
 ENV PATH="${PATH}:/home/nonroot/.local/bin"
