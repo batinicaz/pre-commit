@@ -82,7 +82,7 @@ runs:
         # We always grab the latest stable version so if there's unpatched vulnerabilities, we're just waiting for a patch
         skip-files: /usr/bin/packer,/usr/bin/terraform,/usr/bin/tflint
     - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@b8d3b6e8af63cde30bdc382c0bc28114f4346c88 # ratchet:github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@df559355d593797519d70b90fc8edd5db049e7a2 # ratchet:github/codeql-action/upload-sarif@v3
       with:
         sarif_file: 'trivy-results.sarif'
     - name: Clone test repo for validating image
