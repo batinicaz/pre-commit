@@ -16,7 +16,7 @@ RUN apk add --no-cache bash gcc glibc-dev go git python3 py3-pip rust
 
 # Pre-commit setup
 ENV PATH="${PATH}:/home/nonroot/.local/bin"
-RUN pip3 install --no-cache-dir ansible pre-commit
+RUN pip3 install --no-cache-dir ansible pre-commit cryptography>=46.0.6
 
 # Copy tools used by pre-commit hooks
 COPY --from=build /executables/packer /bin/packer
